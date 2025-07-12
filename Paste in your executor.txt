@@ -1,0 +1,133 @@
+local CoreGui = game:GetService("CoreGui")
+
+-- Supprimer ancien GUI
+local oldGui = CoreGui:FindFirstChild("C00lkidd2025GUI")
+if oldGui then oldGui:Destroy() end
+
+-- Créer GUI principal
+local gui = Instance.new("ScreenGui")
+gui.Name = "C00lkidd2025GUI"
+gui.ResetOnSpawn = false
+gui.Parent = CoreGui
+
+-- Frame principale
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 580, 0, 400)
+frame.Position = UDim2.new(0.5, -290, 0.5, -200)
+frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+frame.BackgroundTransparency = 0.3
+frame.BorderColor3 = Color3.fromRGB(255, 0, 0)
+frame.BorderSizePixel = 2
+frame.Active = true
+frame.Draggable = true
+frame.Parent = gui
+
+-- Image c00lkidd XXL légèrement descendue
+local icon = Instance.new("ImageLabel")
+icon.Size = UDim2.new(0, 200, 0, 100)
+icon.Position = UDim2.new(1, -210, 0, -20) -- ✅ juste en dessous du bord haut
+icon.BackgroundTransparency = 1
+icon.Image = string.format("rbxthumb://type=Asset&id=%s&w=420&h=420", "433517918")
+icon.ScaleType = Enum.ScaleType.Fit
+icon.Parent = frame
+
+-- Bouton rouge X pour fermer
+local closeBtn = Instance.new("TextButton")
+closeBtn.Size = UDim2.new(0, 30, 0, 30)
+closeBtn.Position = UDim2.new(1, -35, 0, 5)
+closeBtn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+closeBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+closeBtn.Font = Enum.Font.GothamBold
+closeBtn.TextSize = 18
+closeBtn.Text = "X"
+closeBtn.Parent = frame
+
+closeBtn.MouseButton1Click:Connect(function()
+    gui:Destroy()
+end)
+
+-- Bouton vert Auto Username Fill
+local autoBtn = Instance.new("TextButton")
+autoBtn.Size = UDim2.new(0, 180, 0, 40)
+autoBtn.Position = UDim2.new(0, 10, 0, 10)
+autoBtn.BackgroundColor3 = Color3.fromRGB(0, 180, 0)
+autoBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+autoBtn.Font = Enum.Font.GothamBold
+autoBtn.TextSize = 16
+autoBtn.Text = "Auto Username Fill"
+autoBtn.Parent = frame
+
+autoBtn.MouseButton1Click:Connect(function()
+    local player = game.Players.LocalPlayer
+    if player then player.Name = "FullUsername" end
+end)
+
+-- Titre c00lkidd 2025
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(0, 200, 0, 40)
+title.Position = UDim2.new(0, 200, 0, 10)
+title.BackgroundTransparency = 1
+title.Text = "c00lkidd 2025"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 28
+title.Parent = frame
+
+-- TextBox centrale
+local scriptBox = Instance.new("TextBox")
+scriptBox.Size = UDim2.new(1, -20, 0, 180)
+scriptBox.Position = UDim2.new(0, 10, 0, 60)
+scriptBox.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+scriptBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+scriptBox.Font = Enum.Font.Code
+scriptBox.TextSize = 18
+scriptBox.TextWrapped = true
+scriptBox.Text = 'require(2845929020).ooga("c00lkiddK1ng")'
+scriptBox.MultiLine = true
+scriptBox.ClearTextOnFocus = false
+scriptBox.Parent = frame
+
+-- Fonction création boutons bas
+local function createBtn(name, x)
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(0, 120, 0, 40)
+    btn.Position = UDim2.new(0, x, 1, -50)
+    btn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    btn.BorderColor3 = Color3.fromRGB(255, 0, 0)
+    btn.TextColor3 = Color3.fromRGB(255, 0, 0)
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 18
+    btn.Text = name
+    btn.Parent = frame
+    return btn
+end
+
+-- Boutons bas
+local execBtn = createBtn("Execute", 10)
+local clearBtn = createBtn("Clear", 150)
+local resetBtn = createBtn("Reset Character", 290)
+local bodyBtn = createBtn("Body Type Switch", 430)
+
+-- Fonctions boutons
+execBtn.MouseButton1Click:Connect(function()
+    local code = scriptBox.Text
+    local func, err = loadstring(code)
+    if func then pcall(func) else warn("Erreur: "..tostring(err)) end
+end)
+
+clearBtn.MouseButton1Click:Connect(function()
+    scriptBox.Text = ""
+end)
+
+resetBtn.MouseButton1Click:Connect(function()
+    local player = game.Players.LocalPlayer
+    if player and player.Character then player.Character:BreakJoints() end
+end)
+
+bodyBtn.MouseButton1Click:Connect(function()
+    local player = game.Players.LocalPlayer
+    if player and player.Character then
+        local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid then humanoid.BodyTypeScale.Value = 1 - humanoid.BodyTypeScale.Value end
+    end
+end)
